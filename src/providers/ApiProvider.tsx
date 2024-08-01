@@ -1,9 +1,10 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, useEffect } from 'react';
 import { useLocalStorage } from 'react-use';
 import useApi from '@/hooks/useApi';
 import { JsonRpcApi, NetworkInfo, Props } from '@/types';
 import { SUPPORTED_NETWORKS } from '@/utils/networks';
 import { DedotClient, LegacyClient } from 'dedot';
+import { useWalletContext } from "@/providers/WalletProvider.tsx";
 
 interface ApiContextProps {
   jsonRpc: JsonRpcApi;
@@ -28,8 +29,14 @@ export const useApiContext = () => {
 };
 
 export default function ApiProvider({ children }: Props) {
+  const { injectedApi } = useWalletContext();
   const [network, setNetwork] = useLocalStorage<NetworkInfo>('SELECTED_NETWORK', DEFAULT_NETWORK);
   const { ready, api, legacy, jsonRpc } = useApi(network);
+
+  useEffect(() => {
+    api?.setSigner(injectedApi?.signer);
+    legacy?.setSigner(injectedApi?.signer);
+  }, [injectedApi, api, legacy])
 
   return (
     <ApiContext.Provider value={{ api, legacy, jsonRpc, apiReady: ready, network: network!, setNetwork }}>
