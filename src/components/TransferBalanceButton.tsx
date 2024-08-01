@@ -1,20 +1,4 @@
-import {
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Input,
-  InputGroup,
-  InputRightAddon,
-  Modal,
-  ModalBody,
-  ModalCloseButton,
-  ModalContent,
-  ModalFooter,
-  ModalHeader,
-  ModalOverlay,
-  useDisclosure
-} from '@chakra-ui/react';
+import { Button, FormControl, FormErrorMessage, FormLabel, Input, InputGroup, InputRightAddon, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useDisclosure } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useBoolean } from 'react-use';
@@ -22,9 +6,13 @@ import { useApiContext } from '@/providers/ApiProvider';
 import { useWalletContext } from '@/providers/WalletProvider';
 import { InjectedAccount, JsonRpcApi } from '@/types';
 import { shortenAddress } from '@/utils/string';
-import { ExternalLinkIcon } from '@chakra-ui/icons';
-import { decodeAddress } from '@dedot/utils';
 import WebsiteWallet from "@/wallets/WebsiteWallet.ts";
+import { ExternalLinkIcon } from '@chakra-ui/icons';
+import { SubstrateApi } from "@dedot/chaintypes";
+import { decodeAddress } from '@dedot/utils';
+import { ISubstrateClient } from "dedot";
+import { RpcVersion } from 'dedot/types';
+
 
 interface TransferBalanceButtonProps {
   fromAccount: InjectedAccount;
@@ -75,12 +63,14 @@ export default function TransferBalanceButton({ fromAccount }: TransferBalanceBu
     }
   }, [amountToSend]);
 
-  const makeTransferViaNewApi = async () => {
+  const makeTransfer = async () => {
     if (!!destValidation) {
       return;
     }
 
-    if (!api || !injectedApi) {
+    const client: ISubstrateClient<SubstrateApi[RpcVersion]> | undefined = jsonRpc === JsonRpcApi.NEW ? api : legacy;
+
+    if (!client || !injectedApi) {
       return;
     }
 
@@ -92,9 +82,9 @@ export default function TransferBalanceButton({ fromAccount }: TransferBalanceBu
         await connectedWallet.sdk?.newWaitingWalletInstance();
       }
 
-      const unsub = await api.tx.balances
+      const unsub = await client.tx.balances
         .transferKeepAlive(destinationAddress, BigInt(`${parseFloat(amountToSend) * Math.pow(10, network.decimals)}`))
-        .signAndSend(fromAccount.address, { signer: injectedApi?.signer }, async ({ status }) => {
+        .signAndSend(fromAccount.address, async ({ status }) => {
           console.log(status);
 
           if (status.type === 'BestChainBlockIncluded' || status.type === 'Finalized') {
@@ -112,7 +102,7 @@ export default function TransferBalanceButton({ fromAccount }: TransferBalanceBu
                 toast.dismiss(toastId);
               }, 2000);
 
-              unsub();
+              await unsub();
             }
           } else if (status.type === 'Invalid') {
             toast.update(toastId, {
@@ -127,7 +117,7 @@ export default function TransferBalanceButton({ fromAccount }: TransferBalanceBu
               toast.dismiss(toastId);
             }, 2000);
 
-            unsub();
+            await unsub();
           } else {
             toast.update(toastId, {
               render: <p>Tx status: <b>{status.type}</b></p>,
@@ -142,83 +132,6 @@ export default function TransferBalanceButton({ fromAccount }: TransferBalanceBu
       setLoading(false);
     }
   };
-
-
-  const makeTransferViaLegacy = async () => {
-    if (!!destValidation) {
-      return;
-    }
-
-    if (!legacy || !injectedApi) {
-      return;
-    }
-
-    setLoading(true);
-    const toastId = toast.info(<p>Signing...</p>, { autoClose: false, isLoading: true });
-
-    try {
-      if (connectedWallet instanceof WebsiteWallet) {
-        await connectedWallet.sdk?.newWaitingWalletInstance();
-      }
-
-      const unsub = await legacy.tx.balances
-        .transferKeepAlive(destinationAddress, BigInt(`${parseFloat(amountToSend) * Math.pow(10, network.decimals)}`))
-        .signAndSend(fromAccount.address, { signer: injectedApi?.signer }, async ({ status }) => {
-          console.log(status);
-
-          if (status.type === 'InBlock' || status.type === 'Finalized') {
-            toast.update(toastId, {
-              render: <p>Tx status: <b>{status.type}</b></p>,
-              type: 'success',
-              isLoading: status.type !== 'Finalized'
-            });
-
-            if (status.type === 'InBlock') {
-              setLoading(false);
-              onClose();
-            } else {
-              setTimeout(() => {
-                toast.dismiss(toastId);
-              }, 2000);
-
-              unsub();
-            }
-          } else if (status.type === 'Invalid') {
-            toast.update(toastId, {
-              render: <p>Tx status: <b>{status.type}</b></p>,
-              type: 'error',
-            });
-
-            setLoading(false);
-            onClose();
-
-            setTimeout(() => {
-              toast.dismiss(toastId);
-            }, 2000);
-
-            unsub();
-          } else {
-            toast.update(toastId, {
-              render: <p>Tx status: <b>{status.type}</b></p>,
-              type: 'info',
-              isLoading: true
-            });
-          }
-        });
-    } catch (e: any) {
-      toast.dismiss(toastId);
-      toast.error(e.toString());
-      setLoading(false);
-    }
-  };
-
-  const makeTransfer = async () => {
-    if (jsonRpc === JsonRpcApi.NEW) {
-      await makeTransferViaNewApi();
-    } else {
-      await makeTransferViaLegacy();
-    }
-  }
 
   return (
     <>
