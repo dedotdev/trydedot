@@ -14,7 +14,7 @@
     "@coong/sdk": "^0.0.23",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
-    "dedot": "^0.1.1",
+    "dedot": "^0.3.0",
     "framer-motion": "^10.12.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,7 +23,7 @@
     "smoldot": "^2.0.29"
   },
   "devDependencies": {
-    "@dedot/chaintypes": "^0.1.1",
+    "@dedot/chaintypes": "^0.5.0",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
