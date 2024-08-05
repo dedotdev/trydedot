@@ -14,7 +14,7 @@
     "@coong/sdk": "^0.0.23",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
-    "dedot": "^0.3.0",
+    "dedot": "^0.4.1",
     "framer-motion": "^10.12.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,7 +23,7 @@
     "smoldot": "^2.0.29"
   },
   "devDependencies": {
-    "@dedot/chaintypes": "^0.5.0",
+    "@dedot/chaintypes": "^0.6.0",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",
@@ -37,5 +37,5 @@
     "vite-tsconfig-paths": "^4.0.3",
     "vitest": "^0.34.6"
   },
-  "packageManager": "yarn@3.4.1"
+  "packageManager": "yarn@4.4.0"
 }
