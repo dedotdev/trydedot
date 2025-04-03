@@ -34,8 +34,8 @@ export default function ApiProvider({ children }: Props) {
   const { ready, api, legacy, jsonRpc } = useApi(network);
 
   useEffect(() => {
-    api?.setSigner(injectedApi?.signer);
-    legacy?.setSigner(injectedApi?.signer);
+    api?.setSigner(injectedApi?.signer as any);
+    legacy?.setSigner(injectedApi?.signer as any);
   }, [injectedApi, api, legacy])
 
   return (
