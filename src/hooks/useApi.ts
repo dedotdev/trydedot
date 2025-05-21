@@ -40,8 +40,7 @@ export default function useApi(network?: NetworkInfo): UseApi {
     if (connectVia === Connection.RPC_ENDPOINT) {
       provider = new WsProvider(network.provider);
     } else {
-      const response = await fetch(`specs/${network.chainSpecFileName}`);
-      const chainSpec = await response.text();
+      const chainSpec = (await network?.getChainSpec?.())!;
       console.log(`${network.name} chain-spec loaded`, JSON.parse(chainSpec));
       console.log(`Connecting to ${network.name} via smoldot ...`)
       const chain = await newSmoldotChain(chainSpec);
