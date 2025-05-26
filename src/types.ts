@@ -11,7 +11,7 @@ export interface NetworkInfo {
   id: string;
   name: string;
   logo: string;
-  provider: string;
+  providers: string[];
   prefix: number;
   symbol: string;
   decimals: number;

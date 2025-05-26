@@ -38,7 +38,10 @@ export default function useApi(network?: NetworkInfo): UseApi {
     let provider: JsonRpcProvider;
 
     if (connectVia === Connection.RPC_ENDPOINT) {
-      provider = new WsProvider(network.provider);
+      provider = new WsProvider(network.providers);
+      provider.on('connected', (endpoint) => {
+        console.log('Connected Endpoint', endpoint);
+      })
     } else {
       const chainSpec = (await network?.getChainSpec?.())!;
       console.log(`${network.name} chain-spec loaded`, JSON.parse(chainSpec));
@@ -56,7 +59,7 @@ export default function useApi(network?: NetworkInfo): UseApi {
     }
 
     setReady(true);
-  }, [jsonRpc, network?.provider]);
+  }, [jsonRpc, network?.providers]);
 
   return { ready, api, legacy, jsonRpc: jsonRpc! };
 }
