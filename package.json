@@ -11,7 +11,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.6.1",
-    "@coong/sdk": "^0.0.23",
+    "@dedot/signer-sdk": "^0.1.0",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
     "@substrate/connect-known-chains": "^1.10.3",

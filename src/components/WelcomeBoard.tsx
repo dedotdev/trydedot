@@ -46,8 +46,8 @@ export default function WelcomeBoard() {
           </ListItem>
           <ListItem>
             You can connect and interact with networks on <b>mobile phone browsers</b> with the support of{' '}
-            <Link href='https://github.com/CoongCrafts/coong-wallet' isExternal color='primary.500'>
-              Coong Wallet
+            <Link href='https://github.com/dedotdev/dedot-web-signer' isExternal color='primary.500'>
+              Dedot Signer
             </Link>
             . Make sure to open the dapp on a native browser app (Chrome, Safari or Firefox), in-app browser might not work as
             expected.

@@ -1,12 +1,12 @@
-import CoongSdk from '@coong/sdk';
 import Wallet, { WalletOptions } from '@/wallets/Wallet';
+import { DedotSignerSdk } from '@dedot/signer-sdk';
 
 interface WebsiteWalletOptions extends WalletOptions {
   walletUrl: string;
 }
 
 export default class WebsiteWallet extends Wallet<WebsiteWalletOptions> {
-  #sdk?: CoongSdk;
+  #sdk?: DedotSignerSdk;
   constructor(options: WebsiteWalletOptions) {
     super(options);
   }
@@ -24,7 +24,7 @@ export default class WebsiteWallet extends Wallet<WebsiteWalletOptions> {
       await this.#sdk.destroy();
     }
 
-    this.#sdk = new CoongSdk({ walletUrl: this.walletUrl });
+    this.#sdk = new DedotSignerSdk({ walletUrl: this.walletUrl });
     await this.#sdk.initialize();
 
     if (this.id !== this.#sdk.walletInfo?.name) {

@@ -5,8 +5,7 @@ import ExtensionWallet from '@/wallets/ExtensionWallet';
 import Wallet from '@/wallets/Wallet';
 import WebsiteWallet from '@/wallets/WebsiteWallet';
 
-const DEFAULT_COONGWALLET_URL = 'https://app.coongwallet.io';
-const DEFAULT_COONGWALLET_ID = 'coongwallet';
+const DEFAULT_DEDOT_SIGNER_URL = 'https://signer.dedot.dev';
 
 const getCustomWalletUrlFromParams = (): string => {
   const params = new URLSearchParams(window.location.search);
@@ -16,15 +15,15 @@ const getCustomWalletUrlFromParams = (): string => {
 
 const getWalletUrl = () => {
   return trimTrailingSlash(
-    getCustomWalletUrlFromParams() || import.meta.env.VITE_COONGWALLET_URL || DEFAULT_COONGWALLET_URL,
+    getCustomWalletUrlFromParams() || import.meta.env.VITE_DEDOT_SIGNER_URL || DEFAULT_DEDOT_SIGNER_URL,
   );
 };
 
 const A_WALLETS: Wallet[] = [
   new WebsiteWallet({
-    name: 'Coong Wallet',
-    id: DEFAULT_COONGWALLET_ID,
-    logo: '/coong-lined-logo.svg',
+    name: 'Dedot Signer',
+    id: 'dedot-signer',
+    logo: '/dedot-signer-logo.png',
     walletUrl: getWalletUrl(),
   }),
   new ExtensionWallet({
