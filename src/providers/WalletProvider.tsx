@@ -1,12 +1,11 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { useAsync, useLocalStorage } from 'react-use';
-import { InjectedAccount } from '@/types';
+import { useLocalStorage } from 'react-use';
 import useWallets from '@/hooks/useWallets';
-import { Props } from '@/types';
+import { InjectedAccount, Props } from '@/types';
 import Wallet from '@/wallets/Wallet';
-import { UpdatableInjected } from '@dedot/signer-sdk/types';
 import WebsiteWallet from '@/wallets/WebsiteWallet.ts';
+import { UpdatableInjected } from '@dedot/signer-sdk/types';
 
 interface WalletContextProps {
   accounts: InjectedAccount[];
@@ -46,47 +45,66 @@ export default function WalletProvider({ children }: Props) {
     return targetWallet;
   };
 
-  useAsync(async () => {
+  useEffect(() => {
     if (!connectedWalletId) {
       setConnectedWallet(undefined);
       return;
     }
 
     let unsub: () => void;
-    try {
-      const targetWallet: Wallet = getWallet(connectedWalletId);
-      setConnectedWallet(targetWallet);
 
-      await targetWallet.waitUntilReady();
+    (async () => {
+      try {
+        const targetWallet: Wallet = getWallet(connectedWalletId);
+        setConnectedWallet(targetWallet);
 
-      const injectedProvider = targetWallet.injectedProvider;
-      if (!injectedProvider?.enable) {
-        throw new Error('Wallet is not existed!');
+        await targetWallet.waitUntilReady();
+
+        const injectedProvider = targetWallet.injectedProvider;
+        if (!injectedProvider?.enable) {
+          throw new Error('Wallet is not existed!');
+        }
+
+        const injectedApi = await injectedProvider.enable('Sample Dapp');
+
+        unsub = injectedApi.accounts.subscribe(setAccounts);
+
+        setInjectedApi(injectedApi);
+      } catch (e: any) {
+        toast.error(e.message);
+        setConnectedWallet(undefined);
+        removeConnectedWalletId();
       }
+    })();
 
-      const injectedApi = await injectedProvider.enable('Sample Dapp');
-
-      unsub = injectedApi.accounts.subscribe(setAccounts);
-
-      setInjectedApi(injectedApi);
-    } catch (e: any) {
-      toast.error(e.message);
-      setConnectedWallet(undefined);
-      removeConnectedWalletId();
+    return () => {
+      unsub && unsub();
     }
-
-    return () => unsub && unsub();
   }, [connectedWalletId]);
 
   const enableWallet = async (walletId: string) => {
     const targetWallet: Wallet = getWallet(walletId);
 
-    if (targetWallet instanceof WebsiteWallet) {
-      await targetWallet.waitUntilReady();
-      await targetWallet.sdk!.newWaitingWalletInstance()
+    if (connectedWallet instanceof WebsiteWallet) {
+      signOut();
     }
 
-    setConnectedWalletId(walletId);
+    try {
+      if (targetWallet instanceof WebsiteWallet) {
+        await targetWallet.waitUntilReady();
+        await targetWallet.sdk!.newWaitingWalletInstance()
+      }
+    } catch (error: any) {
+      console.error(`An error occurred: ${error.message}`);
+    }
+
+    if (walletId === connectedWalletId) {
+      setConnectedWalletId(undefined)
+    }
+
+    setTimeout(() => {
+      setConnectedWalletId(walletId);
+    }, 200)
   };
 
   const signOut = () => {
