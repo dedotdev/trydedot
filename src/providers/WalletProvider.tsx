@@ -1,12 +1,14 @@
 import { createContext, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAsync, useLocalStorage } from 'react-use';
-import { InjectedAccount } from '@/types';
 import useWallets from '@/hooks/useWallets';
+import { InjectedAccount } from '@/types';
 import { Props } from '@/types';
 import Wallet from '@/wallets/Wallet';
-import { UpdatableInjected } from '@dedot/signer-sdk/types';
 import WebsiteWallet from '@/wallets/WebsiteWallet.ts';
+import { UpdatableInjected } from '@dedot/signer-sdk/types';
+import { waitFor } from 'dedot/utils';
+
 
 interface WalletContextProps {
   accounts: InjectedAccount[];
@@ -64,7 +66,9 @@ export default function WalletProvider({ children }: Props) {
         throw new Error('Wallet is not existed!');
       }
 
+      console.log('calling enable')
       const injectedApi = await injectedProvider.enable('Sample Dapp');
+      console.log('injectedApi', injectedApi)
 
       unsub = injectedApi.accounts.subscribe(setAccounts);
 
@@ -84,9 +88,11 @@ export default function WalletProvider({ children }: Props) {
     try {
       if (targetWallet instanceof WebsiteWallet) {
         await targetWallet.waitUntilReady();
-        const targetWindow = await targetWallet.sdk!.newWaitingWalletInstance()
+        await targetWallet.sdk!.newWaitingWalletInstance()
 
-        window.alert(`Window Instance Available: ${!!targetWindow}`);
+        console.log('wait for 2s')
+        await waitFor(2_000)
+        console.log('start connecting wallets')
       }
     } catch (error: any) {
       window.alert(`An error occurred: ${error.message}`);
