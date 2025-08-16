@@ -1,4 +1,4 @@
-import { InjectedWindow } from '@coong/sdk/types';
+import { InjectedWindow } from '@dedot/signer-sdk/types';
 
 export interface WalletOptions {
   id: string;

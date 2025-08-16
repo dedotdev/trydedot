@@ -2,10 +2,10 @@ import { createContext, useContext, useState } from 'react';
 import { toast } from 'react-toastify';
 import { useAsync, useLocalStorage } from 'react-use';
 import { InjectedAccount } from '@/types';
-import { UpdatableInjected } from '@coong/sdk/types';
 import useWallets from '@/hooks/useWallets';
 import { Props } from '@/types';
 import Wallet from '@/wallets/Wallet';
+import { UpdatableInjected } from '@dedot/signer-sdk/types';
 
 interface WalletContextProps {
   accounts: InjectedAccount[];
