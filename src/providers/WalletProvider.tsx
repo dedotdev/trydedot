@@ -6,6 +6,7 @@ import useWallets from '@/hooks/useWallets';
 import { Props } from '@/types';
 import Wallet from '@/wallets/Wallet';
 import { UpdatableInjected } from '@dedot/signer-sdk/types';
+import WebsiteWallet from '@/wallets/WebsiteWallet.ts';
 
 interface WalletContextProps {
   accounts: InjectedAccount[];
@@ -78,6 +79,13 @@ export default function WalletProvider({ children }: Props) {
   }, [connectedWalletId]);
 
   const enableWallet = async (walletId: string) => {
+    const targetWallet: Wallet = getWallet(walletId);
+
+    if (targetWallet instanceof WebsiteWallet) {
+      await targetWallet.waitUntilReady();
+      await targetWallet.sdk!.newWaitingWalletInstance()
+    }
+
     setConnectedWalletId(walletId);
   };
 
