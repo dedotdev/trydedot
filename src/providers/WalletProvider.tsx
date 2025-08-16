@@ -81,9 +81,15 @@ export default function WalletProvider({ children }: Props) {
   const enableWallet = async (walletId: string) => {
     const targetWallet: Wallet = getWallet(walletId);
 
-    if (targetWallet instanceof WebsiteWallet) {
-      await targetWallet.waitUntilReady();
-      await targetWallet.sdk!.newWaitingWalletInstance()
+    try {
+      if (targetWallet instanceof WebsiteWallet) {
+        await targetWallet.waitUntilReady();
+        const targetWindow = await targetWallet.sdk!.newWaitingWalletInstance()
+
+        window.alert(`Window Instance Available: ${!!targetWindow}`);
+      }
+    } catch (error: any) {
+      window.alert(`An error occurred: ${error.message}`);
     }
 
     setConnectedWalletId(walletId);
