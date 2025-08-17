@@ -11,7 +11,7 @@ export default function ConnectedWallet() {
     <LinkBox>
       <Flex align='center' gap={3} flex={1}>
         <LinkOverlay href={walletUrl} isExternal>
-          <img src={connectedWallet?.logo} alt={connectedWallet?.name} width={32}/>
+          <img src={connectedWallet?.logo} alt={connectedWallet?.name} width={32} style={{ borderRadius: 3 }}/>
         </LinkOverlay>
         <Flex direction='column'>
           <Text fontWeight='600'>{connectedWallet?.name}</Text>

@@ -40,7 +40,7 @@ const WalletButton = ({ walletInfo, afterSelectWallet }: WalletButtonProps) => {
       justifyContent='flex-start'
       alignItems='center'
       gap={4}>
-      <img src={logo} alt={`${name}`} width={24} />
+      <img src={logo} alt={`${name}`} width={24} style={{ borderRadius: 3 }} />
       <span>{name}</span>
     </Button>
   );
