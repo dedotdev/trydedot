@@ -11,11 +11,11 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.6.1",
+    "@dedot/chain-specs": "^0.0.2",
     "@dedot/signer-sdk": "^0.1.0",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
-    "@substrate/connect-known-chains": "^1.10.3",
-    "dedot": "^0.15.0",
+    "dedot": "^0.18.5",
     "framer-motion": "^10.12.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,7 +23,7 @@
     "react-use": "^17.4.0"
   },
   "devDependencies": {
-    "@dedot/chaintypes": "^0.132.0",
+    "@dedot/chaintypes": "^0.180.0",
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/react": "^18.0.26",
     "@types/react-dom": "^18.0.9",

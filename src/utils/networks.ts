@@ -17,7 +17,7 @@ export const SUPPORTED_NETWORKS: Record<string, NetworkInfo> = {
     symbol: 'DOT',
     decimals: 10,
     subscanUrl: 'https://polkadot.subscan.io',
-    getChainSpec: async () => (await import('@substrate/connect-known-chains/polkadot')).chainSpec
+    getChainSpec: async () => (await import('@dedot/chain-specs/polkadot')).chainSpec
   },
   kusama: {
     id: 'kusama',
@@ -28,7 +28,7 @@ export const SUPPORTED_NETWORKS: Record<string, NetworkInfo> = {
     symbol: 'KSM',
     decimals: 12,
     subscanUrl: 'https://kusama.subscan.io',
-    getChainSpec: async () => (await import('@substrate/connect-known-chains/ksmcc3')).chainSpec
+    getChainSpec: async () => (await import('@dedot/chain-specs/ksmcc3')).chainSpec
   },
   westend: {
     id: 'westend',
@@ -39,7 +39,7 @@ export const SUPPORTED_NETWORKS: Record<string, NetworkInfo> = {
     symbol: 'WND',
     decimals: 12,
     subscanUrl: 'https://westend.subscan.io',
-    getChainSpec: async () => (await import('@substrate/connect-known-chains/westend2')).chainSpec
+    getChainSpec: async () => (await import('@dedot/chain-specs/westend2')).chainSpec
   },
   // westendAssetHub: {
   //   id: 'westendAssetHub',
@@ -60,7 +60,7 @@ export const SUPPORTED_NETWORKS: Record<string, NetworkInfo> = {
     symbol: 'PAS',
     decimals: 10,
     subscanUrl: 'https://paseo.subscan.io',
-    getChainSpec: async () => (await import('@substrate/connect-known-chains/paseo')).chainSpec
+    getChainSpec: async () => (await import('@dedot/chain-specs/paseo')).chainSpec
   },
   // paseoAssetHub: {
   //   id: 'paseoAssetHub',
