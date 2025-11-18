@@ -11,7 +11,7 @@
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
     "@chakra-ui/react": "^2.6.1",
-    "@dedot/chain-specs": "^0.1.0",
+    "@dedot/chain-specs": "^0.2.0",
     "@dedot/signer-sdk": "^0.1.0",
     "@emotion/react": "^11.10.8",
     "@emotion/styled": "^11.10.8",
