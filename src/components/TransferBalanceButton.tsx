@@ -10,7 +10,7 @@ import WebsiteWallet from "@/wallets/WebsiteWallet.ts";
 import { ExternalLinkIcon } from '@chakra-ui/icons';
 import { SubstrateApi } from "@dedot/chaintypes";
 import { decodeAddress } from '@dedot/utils';
-import { ISubstrateClient } from "dedot";
+import { DedotClient, ISubstrateClient } from 'dedot';
 import { RpcVersion } from 'dedot/types';
 
 
@@ -27,7 +27,7 @@ const checkAddress = (addressToCheck: string) => {
 };
 
 export default function TransferBalanceButton({ fromAccount }: TransferBalanceButtonProps) {
-  const { apiReady, api, legacy, jsonRpc, network } = useApiContext();
+  const { ready, client, network } = useApiContext();
   const { injectedApi, connectedWallet } = useWalletContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [destinationAddress, setDestinationAddress] = useState<string>('');
@@ -67,8 +67,6 @@ export default function TransferBalanceButton({ fromAccount }: TransferBalanceBu
     if (!!destValidation) {
       return;
     }
-
-    const client: ISubstrateClient<SubstrateApi[RpcVersion]> | undefined = jsonRpc === JsonRpcApi.NEW ? api : legacy;
 
     if (!client || !injectedApi) {
       return;
@@ -135,7 +133,7 @@ export default function TransferBalanceButton({ fromAccount }: TransferBalanceBu
 
   return (
     <>
-      <Button isLoading={!apiReady} onClick={onOpen} leftIcon={<ExternalLinkIcon />}>
+      <Button isLoading={!ready} onClick={onOpen} leftIcon={<ExternalLinkIcon />}>
         Transfer
       </Button>
       <Modal onClose={onClose} size='lg' isOpen={isOpen}>

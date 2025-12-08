@@ -9,14 +9,13 @@ interface AccountBalancesProps {
 }
 
 export default function AccountBalances({ address }: AccountBalancesProps) {
-  const { api, legacy, network, apiReady } = useApiContext();
+  const { client, network, ready } = useApiContext();
   const [loading, setLoading] = useBoolean(true);
   const [balance, setBalance] = useState<FrameSystemAccountInfo>();
 
   useEffect(() => {
     let unsubscribe: any;
     (async () => {
-      const client = api || legacy;
       if (!client) {
         return;
       }
@@ -31,7 +30,7 @@ export default function AccountBalances({ address }: AccountBalancesProps) {
     return () => {
       unsubscribe && unsubscribe();
     };
-  }, [api, legacy, address]);
+  }, [client, address]);
 
   const values = [
     {
@@ -53,7 +52,7 @@ export default function AccountBalances({ address }: AccountBalancesProps) {
       {values.map(({ label, amount }) => (
         <Flex key={label} gap={2}>
           <Text>{label}:</Text>
-          <Skeleton h={6} minW={10} isLoaded={apiReady && !loading}>
+          <Skeleton h={6} minW={10} isLoaded={ready && !loading}>
             <strong>
               {(parseFloat(amount.toString()) / Math.pow(10, network.decimals)).toString()}
               &nbsp;

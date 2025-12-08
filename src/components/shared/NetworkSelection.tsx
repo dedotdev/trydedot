@@ -3,9 +3,9 @@ import { useApiContext } from '@/providers/ApiProvider';
 import { SUPPORTED_NETWORKS } from '@/utils/networks';
 
 function NetworkStatusIndicator() {
-  const { apiReady } = useApiContext();
+  const { ready } = useApiContext();
 
-  if (apiReady) {
+  if (ready) {
     return <Box borderRadius='50%' width={3} height={3} backgroundColor='green.500' />;
   } else {
     return <Spinner size='xs' />;

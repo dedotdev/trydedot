@@ -8,9 +8,8 @@ import { useWalletContext } from "@/providers/WalletProvider.tsx";
 
 interface ApiContextProps {
   jsonRpc: JsonRpcApi;
-  api?: DedotClient;
-  legacy?: LegacyClient;
-  apiReady: boolean;
+  client?: DedotClient;
+  ready: boolean;
   network: NetworkInfo;
   setNetworkId: (id: string) => void;
 }
@@ -18,7 +17,7 @@ interface ApiContextProps {
 const DEFAULT_NETWORK = SUPPORTED_NETWORKS['polkadot'];
 
 export const ApiContext = createContext<ApiContextProps>({
-  apiReady: false,
+  ready: false,
   jsonRpc: JsonRpcApi.NEW,
   network: DEFAULT_NETWORK,
   setNetworkId: () => {},
@@ -32,7 +31,7 @@ export default function ApiProvider({ children }: Props) {
   const { injectedApi } = useWalletContext();
   const [networkId, setNetworkId] = useLocalStorage<string>('SELECTED_NETWORK_ID');
   const [network, setNetwork] = useState<NetworkInfo>();
-  const { ready, api, legacy, jsonRpc } = useApi(network);
+  const { ready, client, jsonRpc } = useApi(network);
 
   useEffect(() => {
     if (networkId) {
@@ -43,12 +42,11 @@ export default function ApiProvider({ children }: Props) {
   }, [networkId]);
 
   useEffect(() => {
-    api?.setSigner(injectedApi?.signer as any);
-    legacy?.setSigner(injectedApi?.signer as any);
-  }, [injectedApi, api, legacy])
+    client?.setSigner(injectedApi?.signer as any);
+  }, [injectedApi, client])
 
   return (
-    <ApiContext.Provider value={{ api, legacy, jsonRpc, apiReady: ready, network: network!, setNetworkId }}>
+    <ApiContext.Provider value={{ client, jsonRpc, ready, network: network!, setNetworkId }}>
       {children}
     </ApiContext.Provider>
   );

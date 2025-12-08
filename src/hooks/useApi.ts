@@ -7,8 +7,7 @@ import { DedotClient, JsonRpcProvider, LegacyClient, SmoldotProvider, WsProvider
 type UseApi = {
   ready: boolean;
   jsonRpc: JsonRpcApi;
-  api?: DedotClient;
-  legacy?: LegacyClient;
+  client?: DedotClient;
 };
 
 export default function useApi(network?: NetworkInfo): UseApi {
@@ -17,20 +16,15 @@ export default function useApi(network?: NetworkInfo): UseApi {
   const [cacheMetadata] = useLocalStorage<boolean>('SETTINGS/CACHE_METADATA',true);
 
   const [ready, setReady] = useToggle(false);
-  const [api, setApi] = useState<DedotClient>();
-  const [legacy, setLegacy] = useState<LegacyClient>();
+  const [client, setClient] = useState<DedotClient>();
 
   useAsync(async () => {
     if (!network) {
       return;
     }
 
-    if (api) {
-      await api.disconnect();
-    }
-
-    if (legacy) {
-      await legacy.disconnect()
+    if (client) {
+      await client.disconnect();
     }
 
     setReady(false);
@@ -50,16 +44,12 @@ export default function useApi(network?: NetworkInfo): UseApi {
       provider = new SmoldotProvider(chain);
     }
 
-    if (jsonRpc == JsonRpcApi.LEGACY) {
-      setLegacy(await LegacyClient.new({ provider, cacheMetadata }));
-      setApi(undefined);
-    } else {
-      setApi(await DedotClient.new({ provider, cacheMetadata }));
-      setLegacy(undefined)
-    }
+    const rpcVersion = jsonRpc == JsonRpcApi.LEGACY ? 'legacy' : 'v2';
+
+    setClient(await DedotClient.new({ provider, cacheMetadata, rpcVersion }));
 
     setReady(true);
   }, [jsonRpc, network?.providers]);
 
-  return { ready, api, legacy, jsonRpc: jsonRpc! };
+  return { ready, client, jsonRpc: jsonRpc! };
 }

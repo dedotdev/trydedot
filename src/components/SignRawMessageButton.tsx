@@ -28,13 +28,13 @@ interface SignRawMessageButtonProps {
 }
 
 export default function SignRawMessageButton({ fromAccount }: SignRawMessageButtonProps) {
-  const { apiReady, api } = useApiContext();
+  const { ready, client } = useApiContext();
   const { injectedApi } = useWalletContext();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [messageToSign, setMessageToSign] = useState<string>('This is a dummy message!');
 
   const signMessage = async () => {
-    if (!api || !injectedApi) {
+    if (!client || !injectedApi) {
       return;
     }
 
@@ -54,7 +54,7 @@ export default function SignRawMessageButton({ fromAccount }: SignRawMessageButt
 
   return (
     <>
-      <Button isLoading={!apiReady} onClick={onOpen} leftIcon={<EditIcon />}>
+      <Button isLoading={!ready} onClick={onOpen} leftIcon={<EditIcon />}>
         Sign Message
       </Button>
       <Modal onClose={onClose} size='lg' isOpen={isOpen}>
