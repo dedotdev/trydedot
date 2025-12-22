@@ -1538,7 +1538,7 @@ __metadata:
   dependencies:
     "@chakra-ui/icons": "npm:^2.0.19"
     "@chakra-ui/react": "npm:^2.6.1"
-    "@dedot/chain-specs": "npm:^0.5.0"
+    "@dedot/chain-specs": "npm:^0.6.0"
     "@dedot/chaintypes": "npm:^0.195.0"
     "@dedot/signer-sdk": "npm:^0.1.0"
     "@emotion/react": "npm:^11.10.8"
@@ -1579,10 +1579,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@dedot/chain-specs@npm:^0.5.0":
-  version: 0.5.0
-  resolution: "@dedot/chain-specs@npm:0.5.0"
-  checksum: 10/afd534656c6e0d40d942bb98b26a39123689798777afa26ed535ddbccb743b7c21b39a799fb077edd8db0d4dbc88656658f95056e666a6a935f4f7d61a8c12cd
+"@dedot/chain-specs@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@dedot/chain-specs@npm:0.6.0"
+  checksum: 10/c770dc97357d6ae5962bbd0a02a0e2314d442c047d02d94f80ef5e110f149375f22e4c5ddc3f943adfddd0bcdcd98411037677e66a7a220726301e67fd4c842f
   languageName: node
   linkType: hard
 
